@@ -37,7 +37,7 @@ gem 'jbuilder', '~> 2.5'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platform: :mri
+  gem 'byebug'
 end
 
 group :development do
@@ -51,8 +51,6 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'bootstrap', '~> 4.0.0.alpha6'
 gem 'high_voltage'
 gem 'pg'
-gem 'unicorn'
-gem 'unicorn-rails'
 
 group :development do
   gem 'better_errors'
@@ -71,8 +69,12 @@ end
 
 group :test do
   gem 'capybara'
-  gem 'database_cleaner'
+  gem 'database_cleaner', '1.6.1' # 1.6.2 doesn't seem to work with windows
   gem 'launchy'
   gem 'selenium-webdriver'
 end
 
+group :production do
+  gem 'unicorn'
+  gem 'unicorn-rails'
+end
