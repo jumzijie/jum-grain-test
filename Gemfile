@@ -55,6 +55,7 @@ gem 'pg', '~> 0.21'
 group :development do
   gem 'annotate'
   gem 'better_errors'
+  gem 'binding_of_caller'
   gem 'hub', :require=>nil
   gem 'rails_apps_pages'
   gem 'rails_apps_testing'
