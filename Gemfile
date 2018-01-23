@@ -53,6 +53,7 @@ gem 'high_voltage'
 gem 'pg', '~> 0.21'
 
 group :development do
+  gem 'annotate'
   gem 'better_errors'
   gem 'hub', :require=>nil
   gem 'rails_apps_pages'
