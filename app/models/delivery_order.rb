@@ -12,6 +12,8 @@
 class DeliveryOrder < ApplicationRecord
   has_many :order_items
 
+  default_scope -> { order(created_at: :desc) }
+
   after_create :generate_order_id
 
   # eg. GO001

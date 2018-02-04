@@ -49,6 +49,7 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'bootstrap', '~> 4.0.0.alpha6'
+gem 'font-awesome-rails'
 gem 'high_voltage'
 gem 'pg', '~> 0.21'
 
@@ -79,4 +80,5 @@ end
 group :production do
   gem 'unicorn'
   gem 'unicorn-rails'
+  gem 'rails_12factor'
 end

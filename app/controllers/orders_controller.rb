@@ -1,4 +1,8 @@
 class OrdersController < ApplicationController
+  def home
+    @orders = DeliveryOrder.all
+  end
+
   def index
     orders = []
     DeliveryOrder.find_each do |delivery_order|

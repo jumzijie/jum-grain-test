@@ -1,0 +1,49 @@
+// variables
+$primary: #f6703e;
+$primary-light: #ff8b60;
+$primary-dark: #e85b26;
+
+// mixins
+@mixin box-shadow($args...) {
+  -webkit-box-shadow: $args;
+  box-shadow: $args;
+}
+
+// global
+body {
+  position: relative;
+}
+
+main {
+  padding-top: 20px;
+  padding-bottom: 61px; // height of footer + 20
+}
+
+header, footer {
+  padding: 8px 16px;
+  background-color: #333;
+  color: #fff;
+}
+
+header {
+  border-bottom: 1px solid #222;
+}
+
+footer {
+  border-top: 1px solid #222;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.btn-primary {
+  background-color: $primary;
+  border-color: $primary;
+  &:hover, &:not(:disabled):not(.disabled):active {
+    background-color: $primary-dark;
+    border-color: $primary-dark;
+  }
+  &:focus, &:not(:disabled):not(.disabled):active:focus {
+    @include box-shadow(0 0 0 0.2rem rgba(246, 112, 62, 0.5));
+  }
+}

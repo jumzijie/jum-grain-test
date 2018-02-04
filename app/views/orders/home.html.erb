@@ -1,0 +1,48 @@
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<div class="container" id="home">
+  <h1>
+    Orders
+    <%= fa_icon "thumbs-up" %>
+  </h1>
+
+  <table class="table" id="orders_list">
+    <thead>
+      <tr>
+        <th>
+          ID
+        </th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @orders.each do |order| %>
+        <tr>
+          <td>
+            <%= order.order_id %>
+          </td>
+          <td>
+            <button type="button" class="btn btn-primary">
+              Feedback
+            </button>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <h1>Vue</h1>
+  <p>{{ message }}</p>
+  <input v-model="message">
+</div>
+
+
+  <modal></modal>
+
+<script type="text/javascript">
+  var app = new Vue({
+    el: '#home',
+    data: {
+      message: 'Hello Vue!'
+    }
+  });
+</script>

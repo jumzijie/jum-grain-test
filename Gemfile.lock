@@ -92,6 +92,8 @@ GEM
     faker (1.8.7)
       i18n (>= 0.7)
     ffi (1.9.18-x86-mingw32)
+    font-awesome-rails (4.7.0.3)
+      railties (>= 3.2, < 5.2)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
     high_voltage (3.0.0)
@@ -145,9 +147,14 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.0.3)
       loofah (~> 2.0)
+    rails_12factor (0.0.3)
+      rails_serve_static_assets
+      rails_stdout_logging
     rails_apps_pages (0.6.7)
     rails_apps_testing (0.3.12)
     rails_layout (1.0.41)
+    rails_serve_static_assets (0.0.5)
+    rails_stdout_logging (0.0.5)
     railties (5.0.6)
       actionpack (= 5.0.6)
       activesupport (= 5.0.6)
@@ -245,6 +252,7 @@ DEPENDENCIES
   database_cleaner (= 1.6.1)
   factory_bot_rails
   faker
+  font-awesome-rails
   high_voltage
   hub
   jbuilder (~> 2.5)
@@ -253,6 +261,7 @@ DEPENDENCIES
   pg (~> 0.21)
   puma (~> 3.0)
   rails (~> 5.0.6)
+  rails_12factor
   rails_apps_pages
   rails_apps_testing
   rails_layout
