@@ -11,6 +11,7 @@
 
 class DeliveryOrder < ApplicationRecord
   has_many :order_items
+  has_one :feedback, as: :ratable
 
   default_scope -> { order(created_at: :desc) }
 

@@ -24,6 +24,7 @@
 
 class OrderItem < ApplicationRecord
   # unit price is in cents
+  has_one :feedback, as: :ratable
   belongs_to :delivery_order
   belongs_to :meal
 
