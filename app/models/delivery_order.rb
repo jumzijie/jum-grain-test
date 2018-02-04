@@ -21,19 +21,20 @@ class DeliveryOrder < ApplicationRecord
     update_attributes(order_id: "GO" + id.to_s.rjust(3, '0'))
   end
 
-  def get_serving_date
-    serving_datetime.strftime("%Y-%m-%d")
-  end
-
-  def get_serving_time
-    serving_datetime.strftime("%l:%M") + "-" + (serving_datetime + 30.minutes).strftime("%l:%M%p")
-  end
-
   def to_custom_json
     {
       order_id: order_id,
-      delivery_date: get_serving_date,
-      delivery_time: get_serving_time
+      delivery_date: serving_datetime.strftime("%Y-%m-%d"),
+      delivery_time: serving_datetime.strftime("%l:%M") + "-" + (serving_datetime + 30.minutes).strftime("%l:%M%p")
+    }
+  end
+
+  def to_feedback_json
+    {
+      order_id: order_id,
+      delivery_date: serving_datetime.strftime("%B %-d"),
+      delivery_time: serving_datetime.strftime("%l:%M%p"),
+      order_items: order_items.map { |order_item| order_item.to_custom_json }
     }
   end
 end

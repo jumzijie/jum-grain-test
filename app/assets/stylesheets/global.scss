@@ -1,9 +1,26 @@
+// import
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
 // variables
 $primary: #f6703e;
 $primary-light: #ff8b60;
 $primary-dark: #e85b26;
 
 // mixins
+@mixin hyperlink {
+  & {
+    color: $primary;
+  }
+
+  &:hover {
+    color: $primary-dark;
+  }
+
+  &:focus {
+    outline-color: $primary;
+  }
+}
+
 @mixin box-shadow($args...) {
   -webkit-box-shadow: $args;
   box-shadow: $args;
@@ -12,6 +29,7 @@ $primary-dark: #e85b26;
 // global
 body {
   position: relative;
+  font-family: 'Roboto', sans-serif;
 }
 
 main {
@@ -36,6 +54,10 @@ footer {
   width: 100%;
 }
 
+a {
+  @include hyperlink;
+}
+
 .btn-primary {
   background-color: $primary;
   border-color: $primary;
@@ -45,5 +67,40 @@ footer {
   }
   &:focus, &:not(:disabled):not(.disabled):active:focus {
     @include box-shadow(0 0 0 0.2rem rgba(246, 112, 62, 0.5));
+  }
+}
+
+.btn-outline-primary {
+  color: $primary;
+  border-color: $primary;
+  &:hover, &:not(:disabled):not(.disabled):active {
+    background-color: $primary;
+    border-color: $primary;
+    color: #fff;
+  }
+  &:focus, &:not(:disabled):not(.disabled):active:focus {
+    @include box-shadow(0 0 0 0.2rem rgba(246, 112, 62, 0.5));
+  }
+}
+
+// modal
+.modal-dialog {
+  @media (min-width: 576px) {
+    max-width: 600px;
+  }
+}
+
+.modal-header {
+  display: block;
+  .close {
+    float: right;
+  }
+  h5 {
+    font-weight: bold;
+    letter-spacing: -1px;
+    margin-bottom: 5px;
+  }
+  p {
+    margin-bottom: 5px;
   }
 }

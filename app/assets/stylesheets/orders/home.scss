@@ -4,4 +4,39 @@
       width: 1%;
     }
   }
+  .contact-us {
+    color: #999;
+  }
+
+  #feedbackModal {
+    .modal-body {
+      background-color: #f7f7f7;
+      h5 {
+        font-weight: bold;
+        letter-spacing: -1px;
+      }
+      .ratable_item {
+        padding: 10px;
+        background-color: #fff;
+        border-bottom: 2px solid #ddd;
+        margin-bottom: 15px;
+        .rating {
+          width: 1%;
+          white-space: nowrap;
+        }
+        .fa {
+          font-size: 1.75em;
+        }
+        .fa + .fa {
+          margin-left: 5px;
+        }
+      }
+      #comments {
+        padding-left: 0.375rem;
+        padding-right: 0.375rem;
+        border-bottom: 1px solid #ddd;
+        outline-color: transparent;
+      }
+    }
+  }
 }
