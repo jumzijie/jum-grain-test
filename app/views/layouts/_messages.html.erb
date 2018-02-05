@@ -1,5 +1,5 @@
 <% flash.each do |name, msg| %>
-  <% if msg.is_a?(String) && name != 'success' %>
+  <% if msg.is_a?(String) %>
     <div class="alert alert-dismissible alert-<%= name.to_s == 'notice' ? 'success' : 'danger' %>">
       <button class="close" type="button" data-dismiss="alert" aria-hidden="true">
         ×
@@ -7,28 +7,4 @@
       <%= content_tag :div, msg, :id => "flash_#{name}" %>
     </div>
   <% end %>
-<% end %>
-
-<% if flash.first && flash.first.first == 'success' %>
-  <div class="modal fade" id="alertModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5>
-            Success!
-          </h5>
-        </div>
-        <div class="modal-body">
-          <%= content_tag :div, flash.first.second %>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script type="text/javascript">
-    $("#alertModal").modal("show");
-  </script>
 <% end %>

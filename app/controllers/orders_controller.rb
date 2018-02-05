@@ -79,10 +79,13 @@ class OrdersController < ApplicationController
         feedback.save
       end
 
-      flash[:success] = "Thank you for your feedback!"
-      redirect_to root_path
+      render json: {
+        message: "Thank you for your feedback!"
+      }, status: :ok
     else
-      redirect_to root_path, alert: "Error: Can't find order."
+      render json: {
+        error: "Cannot find DeliveryOrder with id '#{params[:order_id]}'"
+      }, status: :error
     end
   end
 end

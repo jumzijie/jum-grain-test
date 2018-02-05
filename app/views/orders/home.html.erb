@@ -1,4 +1,10 @@
-<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<% if Rails.env.production? %>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.min.js"></script>
+<% else %>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+<% end %>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
 <div class="container" id="home">
   <h1>
     Orders
@@ -28,7 +34,7 @@
     </tbody>
   </table>
 
-  <!-- Modal -->
+  <!-- Feedback Modal -->
   <div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-labelledby="feedbackModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -101,8 +107,27 @@
               <%= text_field_tag "comment", "", placeholder: "Feel free to leave us a comment...", class: "form-control-plaintext comment" %>
             </div>
 
-            <%= submit_tag "Submit", class: "btn btn-primary btn-block", "v-bind:disabled": "!can_submit" %>
+            <%= submit_tag "Submit", class: "btn btn-primary btn-block", "v-bind:disabled": "!can_submit && !submitting", "v-on:click": "submitForm" %>
           </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Thank you Modal -->
+  <div class="modal fade" id="thankYouModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5>
+            Feedback submitted!
+          </h5>
+        </div>
+        <div class="modal-body">
+          {{ feedback_submitted_message }}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
@@ -132,6 +157,23 @@
       },
       rateDown: function(index) {
         this.$set(this.order_item_ratings, index, -1);
+      },
+      submitForm: function(e) {
+        e.preventDefault();
+        this.submitting = true;
+        var form = $(e.target).parents("form").first();
+        axios.post(form.attr("action"), form.serialize())
+        .then(function (response) {
+          app.submitting = false;
+          app.feedback_submitted_message = response.data.message;
+          app.order.feedback_submitted = true
+          // hide feedback modal and show thank you modal
+          $("#feedbackModal").modal("hide");
+          $("#feedbackModal").one("hidden.bs.modal", function(){
+            $("#thankYouModal").modal("show");
+          });
+        });
+
       }
     },
     computed: {
@@ -144,7 +186,9 @@
       order: {},
       form_url: "",
       order_item_ratings: [],
-      order_rating: 0
+      order_rating: 0,
+      submitting: false,
+      feedback_submitted_message: ""
     }
   });
 </script>
