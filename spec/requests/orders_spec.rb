@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "Orders", :type => :request do
 
   before do
-    @delivery_order = DeliveryOrder.find_or_create_by(serving_datetime: Time.zone.now.beginning_of_day + 1.day + 11.hours)
+    @delivery_order = DeliveryOrder.first_or_create(serving_datetime: Time.zone.now.beginning_of_day + 1.day + 11.hours)
   end
 
   it "get Orders" do
@@ -23,7 +23,7 @@ RSpec.describe "Orders", :type => :request do
   end
 
   it "get specific Order that doesn't exist" do
-    get "/orders/GO123"
+    get "/orders/ABC123"
     expect(response.content_type).to eq("application/json")
     expect(response).to have_http_status(:error)
   end
