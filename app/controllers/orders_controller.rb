@@ -55,7 +55,8 @@ class OrdersController < ApplicationController
         feedback.save
       end
 
-      redirect_to root_path, notice: "Thank you for your feedback!"
+      flash[:success] = "Thank you for your feedback!"
+      redirect_to root_path
     else
       redirect_to root_path, alert: "Error: Can't find order."
     end
