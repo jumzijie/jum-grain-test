@@ -43,6 +43,6 @@ test:
   <<: *default
   database: grain_test
 
-production:
-  <<: *default
-  database: grain_production
+# production:
+#   <<: *default
+#   database: grain_production
