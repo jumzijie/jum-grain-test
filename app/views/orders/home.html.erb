@@ -69,18 +69,19 @@
                       <tr>
                         <td>
                           {{ order_item.name }}
-                          <%= hidden_field_tag "order_items[][id]", "", ":value": "order_item.id" %>
+                          <%= hidden_field_tag "feedbacks[][ratable_id]", "", ":value": "order_item.id" %>
+                          <%= hidden_field_tag "feedbacks[][ratable_type]", OrderItem.to_s %>
                         </td>
                         <td class="rating">
                           <%= fa_icon "thumbs-up", "v-on:click": "rateUp(index)", "v-bind:class": "{ rated: order_item_ratings[index] == 1 }", class: "btn-rate", title: "good" %>
                           <%= fa_icon "thumbs-down", "v-on:click": "rateDown(index)", "v-bind:class": "{ rated: order_item_ratings[index] == -1 }", class: "btn-rate", title: "bad" %>
-                          <%= hidden_field_tag "order_items[][rating]", "", "v-model": "order_item_ratings[index]" %>
+                          <%= hidden_field_tag "feedbacks[][rating]", "", "v-model": "order_item_ratings[index]" %>
                         </td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
-                <%= text_field_tag "order_items[][comment]", "", ":placeholder": "'Any comments about our ' + order_item.name + '?'", class: "form-control-plaintext comment" %>
+                <%= text_field_tag "feedbacks[][comment]", "", ":placeholder": "'Any comments about our ' + order_item.name + '?'", class: "form-control-plaintext comment" %>
               </div>
             </div>
 
@@ -94,17 +95,19 @@
                     <tr>
                       <td>
                         Courier
+                        <%= hidden_field_tag "feedbacks[][ratable_id]", "", ":value": "order.id" %>
+                        <%= hidden_field_tag "feedbacks[][ratable_type]", DeliveryOrder.to_s %>
                       </td>
                       <td class="rating">
                         <%= fa_icon "thumbs-up", "v-on:click": "order_rating = 1", "v-bind:class": "{ rated: order_rating == 1 }", class: "btn-rate", title: "good" %>
                         <%= fa_icon "thumbs-down", "v-on:click": "order_rating = -1", "v-bind:class": "{ rated: order_rating == -1 }", class: "btn-rate", title: "bad" %>
-                        <%= hidden_field_tag "rating", "", "v-model": "order_rating" %>
+                        <%= hidden_field_tag "feedbacks[][rating]", "", "v-model": "order_rating" %>
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
-              <%= text_field_tag "comment", "", placeholder: "Feel free to leave us a comment...", class: "form-control-plaintext comment" %>
+              <%= text_field_tag "feedbacks[][comment]", "", placeholder: "Feel free to leave us a comment...", class: "form-control-plaintext comment" %>
             </div>
 
             <%= submit_tag "Submit", class: "btn btn-primary btn-block", "v-bind:disabled": "!can_submit && !submitting", "v-on:click": "submitForm" %>

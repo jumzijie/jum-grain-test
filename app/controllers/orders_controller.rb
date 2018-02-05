@@ -61,27 +61,22 @@ class OrdersController < ApplicationController
   def submit_feedbacks
     delivery_order = DeliveryOrder.find_by(order_id: params[:order_id])
     if delivery_order
-      # create feedbacks for order_items
-      params[:order_items].each do |feedback_params|
-        # only create if order_item belongs to delivery_order, and feedback not created yet
-        order_item = delivery_order.order_items.find_by(id: feedback_params[:id])
-        if order_item && order_item.feedback.blank?
-          feedback = Feedback.new(feedback_params.permit(:rating, :comment))
-          feedback.ratable = order_item
-          feedback.save
+      if params[:feedbacks].present?
+        # create feedbacks
+        feedbacks = []
+        params[:feedbacks].each do |feedback_params|
+          feedback = Feedback.new(feedback_params.permit(:ratable_id, :ratable_type, :rating, :comment))
+          feedback.save!
         end
-      end
 
-      # create feedback for delivery_order only if not yet created
-      if delivery_order.feedback.blank?
-        feedback = Feedback.new(params.permit(:rating, :comment))
-        feedback.ratable = delivery_order
-        feedback.save
+        render json: {
+          message: "Thank you for your feedback!"
+        }, status: :ok
+      else
+        render json: {
+          error: "Please fill in your feedback."
+        }, status: :error
       end
-
-      render json: {
-        message: "Thank you for your feedback!"
-      }, status: :ok
     else
       render json: {
         error: "Cannot find DeliveryOrder with id '#{params[:order_id]}'"

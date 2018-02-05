@@ -43,15 +43,15 @@ RSpec.describe "Feedbacks", :type => :request do
   end
 
   it "submitting of feedbacks" do
-    order_items = []
+    feedbacks = []
     # not sure why, but @delivery_order.order_items doesn't work
     OrderItem.where(delivery_order_id: @delivery_order.id).each do |order_item|
-      order_items.push({ rating: 1, comment: "Order item comment" })
+      feedbacks.push({ ratable_id: order_item.id, ratable_type: OrderItem.to_s, rating: 1, comment: "Order item comment" })
     end
+    feedbacks.push({ ratable_id: @delivery_order.id, ratable_type: DeliveryOrder.to_s, rating: 1, comment: "
+      Delivery comment" })
     post "/orders/#{@delivery_order.order_id}/feedbacks", params: {
-      rating: 1,
-      comment: "Delivery comment",
-      order_items: order_items
+      feedbacks: feedbacks
     }
     expect(response.content_type).to eq("application/json")
     expect(response).to have_http_status(:ok)
@@ -60,14 +60,13 @@ RSpec.describe "Feedbacks", :type => :request do
   describe "after submission of feedbacks" do
     before do
       OrderItem.where(delivery_order_id: @delivery_order.id).each do |order_item|
-        feedback = Feedback.new(rating: 1, comment: "Order item comment")
-        feedback.ratable = order_item
-        feedback.save
+        feedback = Feedback.new(ratable_id: order_item.id, ratable_type: OrderItem.to_s, rating: 1, comment: "Order item comment")
+        feedback.save!
       end
 
-      feedback = Feedback.new(rating: 1, comment: "Delivery comment")
+      feedback = Feedback.new(ratable_id: @delivery_order.id, ratable_type: DeliveryOrder.to_s, rating: 1, comment: "Delivery comment")
       feedback.ratable = @delivery_order
-      feedback.save
+      feedback.save!
     end
 
     it "get existent feedbacks of specific order" do

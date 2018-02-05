@@ -36,6 +36,7 @@ class DeliveryOrder < ApplicationRecord
   # for handling feedback submission
   def to_feedback_json
     {
+      id: id,
       order_id: order_id,
       delivery_date: serving_datetime.strftime("%B %-d"),
       delivery_time: serving_datetime.strftime("%l:%M%p"),
