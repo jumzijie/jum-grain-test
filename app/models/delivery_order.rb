@@ -24,6 +24,7 @@ class DeliveryOrder < ApplicationRecord
 
   def to_custom_json
     {
+      id: id,
       order_id: order_id,
       delivery_date: serving_datetime.strftime("%Y-%m-%d"),
       delivery_time: serving_datetime.strftime("%l:%M") + "-" + (serving_datetime + 30.minutes).strftime("%l:%M%p"),
