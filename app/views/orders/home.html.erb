@@ -14,19 +14,17 @@
         <th></th>
       </tr>
     </thead>
-    <tbody>
-      <% @orders.each do |order| %>
-        <tr>
-          <td>
-            <%= order.order_id %>
-          </td>
-          <td>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#feedbackModal" v-on:click="loadOrder('<%= order.order_id %>')">
-              Feedback
-            </button>
-          </td>
-        </tr>
-      <% end %>
+    <tbody v-for="order in orders">
+      <tr>
+        <td>
+          {{ order.order_id }}
+        </td>
+        <td>
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#feedbackModal" v-on:click="loadOrder(order.order_id)" v-if="!order.feedback_submitted">
+            Feedback
+          </button>
+        </td>
+      </tr>
     </tbody>
   </table>
 
@@ -49,53 +47,62 @@
           </p>
         </div>
         <div class="modal-body">
-          <div class="form-group">
-            <h5>
-              How was the food?
-            </h5>
-            <div v-for="order_item in order.order_items" class="ratable_item">
-              <table>
-                <tbody>
-                  <tr>
-                    <td>
-                      {{ order_item.name }}
-                    </td>
-                    <td class="rating">
-                      <%= fa_icon "thumbs-up" %>
-                      <%= fa_icon "thumbs-down" %>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+          <form v-bind:action="form_url" method="post">
+            <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+            <div class="form-group">
+              <div v-if="can_submit" class="badge badge-outline-primary all-is-good">
+                All is good
+              </div>
+              <h5>
+                How was the food?
+              </h5>
+              <div v-for="(order_item, index) in order.order_items" class="ratable_item">
+                <table>
+                  <tbody>
+                    <tr>
+                      <td>
+                        {{ order_item.name }}
+                        <%= hidden_field_tag "order_items[][id]", "", ":value": "order_item.id" %>
+                      </td>
+                      <td class="rating">
+                        <%= fa_icon "thumbs-up", "v-on:click": "rateUp(index)", "v-bind:class": "{ rated: order_item_ratings[index] == 1 }", class: "btn-rate", title: "good" %>
+                        <%= fa_icon "thumbs-down", "v-on:click": "rateDown(index)", "v-bind:class": "{ rated: order_item_ratings[index] == -1 }", class: "btn-rate", title: "bad" %>
+                        <%= hidden_field_tag "order_items[][rating]", "", "v-model": "order_item_ratings[index]" %>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
 
-          <div class="form-group">
-            <h5>
-              How about our delivery?
-            </h5>
-            <div class="ratable_item">
-              <table>
-                <tbody>
-                  <tr>
-                    <td>
-                      Courier
-                    </td>
-                    <td class="rating">
-                      <%= fa_icon "thumbs-up" %>
-                      <%= fa_icon "thumbs-down" %>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+            <div class="form-group">
+              <h5>
+                How about our delivery?
+              </h5>
+              <div class="ratable_item">
+                <table>
+                  <tbody>
+                    <tr>
+                      <td>
+                        Courier
+                      </td>
+                      <td class="rating">
+                        <%= fa_icon "thumbs-up", "v-on:click": "order_rating = 1", "v-bind:class": "{ rated: order_rating == 1 }", class: "btn-rate", title: "good" %>
+                        <%= fa_icon "thumbs-down", "v-on:click": "order_rating = -1", "v-bind:class": "{ rated: order_rating == -1 }", class: "btn-rate", title: "bad" %>
+                        <%= hidden_field_tag "rating", "", "v-model": "order_rating" %>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
 
-          <div class="form-group">
-            <%= text_field_tag "comments", "", placeholder: "Feel free to leave us a comment...", class: "form-control-plaintext" %>
-          </div>
+            <div class="form-group">
+              <%= text_field_tag "comment", "", placeholder: "Feel free to leave us a comment...", class: "form-control-plaintext" %>
+            </div>
 
-          <button type="button" class="btn btn-primary btn-block">Submit</button>
+            <%= submit_tag "Submit", class: "btn btn-primary btn-block", "v-bind:disabled": "!can_submit" %>
+          </form>
         </div>
       </div>
     </div>
@@ -108,18 +115,36 @@
     el: '#home',
     methods: {
       loadOrder: function (order_id) {
-        orders = this.$data.orders;
+        orders = this.orders;
         for (var i = 0; i < orders.length; i++) {
           if (orders[i].order_id == order_id) {
-            this.$data.order = orders[i];
+            this.order = orders[i];
+            this.form_url = "/orders/" + orders[i].order_id + "/feedbacks";
+            // reset
+            this.order_item_ratings = new Array(orders[i].order_items.length).fill(0);
+            this.order_rating = 0;
             break;
           }
         }
+      },
+      rateUp: function(index) {
+        this.$set(this.order_item_ratings, index, 1);
+      },
+      rateDown: function(index) {
+        this.$set(this.order_item_ratings, index, -1);
+      }
+    },
+    computed: {
+      can_submit: function() {
+        return !(this.order_rating == 0 || this.order_item_ratings.indexOf(0) != -1);
       }
     },
     data: {
       orders: <%= @orders.map { |order| order.to_feedback_json }.to_json.html_safe %>,
-      order: <%= @orders.first.to_feedback_json.to_json.html_safe %>
+      order: {},
+      form_url: "",
+      order_item_ratings: [],
+      order_rating: 0
     }
   });
 </script>

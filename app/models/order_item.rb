@@ -30,6 +30,7 @@ class OrderItem < ApplicationRecord
 
   def to_custom_json
     {
+      id: id,
       name: meal.name,
       quantity: quantity,
       total_price: unit_price * quantity

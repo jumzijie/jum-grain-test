@@ -15,10 +15,6 @@ $primary-dark: #e85b26;
   &:hover {
     color: $primary-dark;
   }
-
-  &:focus {
-    outline-color: $primary;
-  }
 }
 
 @mixin box-shadow($args...) {
@@ -27,9 +23,13 @@ $primary-dark: #e85b26;
 }
 
 // global
-body {
-  position: relative;
+html, body {
+  height: 100%;
   font-family: 'Roboto', sans-serif;
+  #wrapper {
+    position: relative;
+    min-height: 100%;
+  }
 }
 
 main {
@@ -58,9 +58,15 @@ a {
   @include hyperlink;
 }
 
+:focus {
+  outline-color: $primary;
+}
+
 .btn-primary {
-  background-color: $primary;
-  border-color: $primary;
+  &, &:disabled {
+    background-color: $primary;
+    border-color: $primary;
+  }
   &:hover, &:not(:disabled):not(.disabled):active {
     background-color: $primary-dark;
     border-color: $primary-dark;
@@ -70,17 +76,10 @@ a {
   }
 }
 
-.btn-outline-primary {
+.badge-outline-primary {
+  background-color: transparent;
+  border: 1px solid $primary;
   color: $primary;
-  border-color: $primary;
-  &:hover, &:not(:disabled):not(.disabled):active {
-    background-color: $primary;
-    border-color: $primary;
-    color: #fff;
-  }
-  &:focus, &:not(:disabled):not(.disabled):active:focus {
-    @include box-shadow(0 0 0 0.2rem rgba(246, 112, 62, 0.5));
-  }
 }
 
 // modal

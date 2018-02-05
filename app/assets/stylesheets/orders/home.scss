@@ -11,9 +11,16 @@
   #feedbackModal {
     .modal-body {
       background-color: #f7f7f7;
+      .all-is-good {
+        float: right;
+        font-size: 0.9em;
+        font-weight: normal;
+        padding: 5px 10px;
+      }
       h5 {
         font-weight: bold;
         letter-spacing: -1px;
+        margin-bottom: 15px;
       }
       .ratable_item {
         padding: 10px;
@@ -29,6 +36,22 @@
         }
         .fa + .fa {
           margin-left: 5px;
+        }
+        .btn-rate {
+          cursor: pointer;
+          color: #999;
+          &:hover {
+            color: $primary;
+          }
+          &:not(:disabled):not(.disabled):active {
+            color: $primary-dark;
+          }
+          &:focus {
+            outline-color: $primary-dark;
+          }
+        }
+        .rated {
+          color: $primary;
         }
       }
       #comments {

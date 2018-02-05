@@ -3,4 +3,6 @@ Rails.application.routes.draw do
   root to: 'orders#home'
   get 'orders' => 'orders#index'
   get 'orders/:order_id' => 'orders#show'
+
+  post 'orders/:order_id/feedbacks' => 'orders#feedbacks'
 end

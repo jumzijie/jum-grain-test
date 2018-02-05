@@ -35,7 +35,8 @@ class DeliveryOrder < ApplicationRecord
       order_id: order_id,
       delivery_date: serving_datetime.strftime("%B %-d"),
       delivery_time: serving_datetime.strftime("%l:%M%p"),
-      order_items: order_items.map { |order_item| order_item.to_custom_json }
+      order_items: order_items.map { |order_item| order_item.to_custom_json },
+      feedback_submitted: feedback.present?
     }
   end
 end
