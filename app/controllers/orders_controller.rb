@@ -66,7 +66,7 @@ class OrdersController < ApplicationController
         # only create if order_item belongs to delivery_order, and feedback not created yet
         order_item = delivery_order.order_items.find_by(id: feedback_params[:id])
         if order_item && order_item.feedback.blank?
-          feedback = Feedback.new(feedback_params.permit(:rating))
+          feedback = Feedback.new(feedback_params.permit(:rating, :comment))
           feedback.ratable = order_item
           feedback.save
         end
@@ -74,7 +74,7 @@ class OrdersController < ApplicationController
 
       # create feedback for delivery_order only if not yet created
       if delivery_order.feedback.blank?
-        feedback = Feedback.new(params.permit(:rating, :comments))
+        feedback = Feedback.new(params.permit(:rating, :comment))
         feedback.ratable = delivery_order
         feedback.save
       end
