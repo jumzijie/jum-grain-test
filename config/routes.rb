@@ -4,5 +4,6 @@ Rails.application.routes.draw do
   get 'orders' => 'orders#index'
   get 'orders/:order_id' => 'orders#show'
 
-  post 'orders/:order_id/feedbacks' => 'orders#feedbacks'
+  get 'orders/:order_id/feedbacks' => 'orders#feedbacks'
+  post 'orders/:order_id/feedbacks' => 'orders#submit_feedbacks'
 end

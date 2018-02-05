@@ -26,10 +26,13 @@ class DeliveryOrder < ApplicationRecord
     {
       order_id: order_id,
       delivery_date: serving_datetime.strftime("%Y-%m-%d"),
-      delivery_time: serving_datetime.strftime("%l:%M") + "-" + (serving_datetime + 30.minutes).strftime("%l:%M%p")
+      delivery_time: serving_datetime.strftime("%l:%M") + "-" + (serving_datetime + 30.minutes).strftime("%l:%M%p"),
+      feedback_submitted: feedback.present?,
+      order_items: order_items.map { |order_item| { order_item_id: order_item.id, name: order_item.meal.name } }
     }
   end
 
+  # for handling feedback submission
   def to_feedback_json
     {
       order_id: order_id,

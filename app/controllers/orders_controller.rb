@@ -37,6 +37,30 @@ class OrdersController < ApplicationController
   def feedbacks
     delivery_order = DeliveryOrder.find_by(order_id: params[:order_id])
     if delivery_order
+      if delivery_order.feedback.present?
+        feedbacks = [delivery_order.feedback.to_custom_json]
+        delivery_order.order_items.each do |order_item|
+          feedbacks.push(order_item.feedback.to_custom_json)
+        end
+
+        render json: {
+          feedbacks: feedbacks
+        }, status: :ok
+      else
+        render json: {
+          error: "DeliveryOrder #{params[:order_id]} has not received any feedback yet."
+        }, status: :error
+      end
+    else
+      render json: {
+        error: "Cannot find DeliveryOrder with id '#{params[:order_id]}'"
+      }, status: :error
+    end
+  end
+
+  def submit_feedbacks
+    delivery_order = DeliveryOrder.find_by(order_id: params[:order_id])
+    if delivery_order
       # create feedbacks for order_items
       params[:order_items].each do |feedback_params|
         # only create if order_item belongs to delivery_order, and feedback not created yet
