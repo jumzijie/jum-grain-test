@@ -4,10 +4,7 @@ class OrdersController < ApplicationController
   end
 
   def index
-    orders = []
-    DeliveryOrder.find_each do |delivery_order|
-      orders.push(delivery_order.to_custom_json)
-    end
+    orders = DeliveryOrder.all.map { |delivery_order| delivery_order.to_custom_json }
 
     render json: {
       orders: orders,
@@ -18,11 +15,7 @@ class OrdersController < ApplicationController
     delivery_order = DeliveryOrder.find_by(order_id: params[:order_id])
     if delivery_order
       order = delivery_order.to_custom_json
-
-      order[:order_items] = []
-      delivery_order.order_items.each do |order_item|
-        order[:order_items].push(order_item.to_custom_json)
-      end
+      order[:order_items] = delivery_order.order_items.map { |order_item| order_item.to_custom_json }
 
       render json: {
         order: order
@@ -38,10 +31,8 @@ class OrdersController < ApplicationController
     delivery_order = DeliveryOrder.find_by(order_id: params[:order_id])
     if delivery_order
       if delivery_order.feedback.present?
-        feedbacks = [delivery_order.feedback.to_custom_json]
-        delivery_order.order_items.each do |order_item|
-          feedbacks.push(order_item.feedback.to_custom_json)
-        end
+        feedbacks = delivery_order.order_items.map { |order_item| order_item.feedback.to_custom_json }
+        feedbacks.unshift(delivery_order.feedback.to_custom_json)
 
         render json: {
           feedbacks: feedbacks
