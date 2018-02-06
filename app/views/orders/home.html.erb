@@ -122,11 +122,11 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5>
-            Feedback submitted!
+            {{ thank_you_title }}
           </h5>
         </div>
         <div class="modal-body">
-          {{ feedback_submitted_message }}
+          {{ thank_you_message }}
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
@@ -167,15 +167,21 @@
         axios.post(form.attr("action"), form.serialize())
         .then(function (response) {
           app.submitting = false;
-          app.feedback_submitted_message = response.data.message;
+          app.thank_you_title = "Feedback submitted!";
+          app.thank_you_message = response.data.message;
           app.order.feedback_submitted = true
-          // hide feedback modal and show thank you modal
+          // hide feedback modal, then show thank you modal
           $("#feedbackModal").modal("hide");
           $("#feedbackModal").one("hidden.bs.modal", function(){
             $("#thankYouModal").modal("show");
           });
+        })
+        .catch(function (error) {
+          app.submitting = false;
+          app.thank_you_title = "Error";
+          app.thank_you_message = error.response.data.error;
+          $("#thankYouModal").modal("show");
         });
-
       }
     },
     computed: {
@@ -190,7 +196,8 @@
       order_item_ratings: [],
       order_rating: 0,
       submitting: false,
-      feedback_submitted_message: ""
+      thank_you_title: "",
+      thank_you_message: ""
     }
   });
 </script>
